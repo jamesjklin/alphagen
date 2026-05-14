@@ -162,7 +162,7 @@ class LinearAlphaPool(AlphaPoolBase, metaclass=ABCMeta):
     def evaluate_ensemble(self) -> float:
         if self.size == 0:
             return 0.
-        return self.calculator.calc_pool_IC_ret(self.exprs[:self.size], self.weights)  # type: ignore
+        return self.calculator.calc_pool_rIC_ret(self.exprs[:self.size], self.weights)  # type: ignore
 
     @property
     def _under_thres_alpha(self) -> bool:
@@ -175,7 +175,7 @@ class LinearAlphaPool(AlphaPoolBase, metaclass=ABCMeta):
         expr: Expression,
         ic_mut_threshold: Optional[float] = None
     ) -> Tuple[float, Optional[List[float]]]:
-        single_ic = self.calculator.calc_single_IC_ret(expr)
+        single_ic = self.calculator.calc_single_rIC_ret(expr)
         if not self._under_thres_alpha and single_ic < self._ic_lower_bound:
             return single_ic, None
 

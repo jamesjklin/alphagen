@@ -51,7 +51,7 @@ def _metric(x, y, w):
 
     expr = eval(key)
     try:
-        ic = calculator_train.calc_single_IC_ret(expr)
+        ic = calculator_train.calc_single_rIC_ret(expr)
     except OutOfDataRangeError:
         ic = -1.
     if np.isnan(ic):
