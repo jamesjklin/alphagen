@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "alphagen"
+version = "0.1.0+jamesjklin"
+description = "AlphaGen GP engine — jamesjklin fork; editable install for finlab-alphagen"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "See upstream RL-MLDM/alphagen license" }
+authors = [{ name = "RL-MLDM (upstream)" }, { name = "James Lin (fork)" }]
+
+# 故意不列 dependencies:
+# - alphagen requirements.txt 釘的版本(torch==2.0.1 / numpy==1.20.1 / pandas==1.2.4 / qlib / baostock / stable_baselines3 ...)
+#   與 finlab-alphagen 主專案的版本範圍衝突。
+# - finlab-alphagen 只用 alphagen 的特定 submodule(主要是 alphagen.data.calculator 介面、
+#   alphagen_qlib.stock_data.StockData 包裝),不跑完整 RL pipeline。
+# - 由 parent finlab-alphagen 的 pyproject 統一管 deps(torch>=2.1 / numpy>=1.24 / pandas>=2.0 等)。
+# - 個別 submodule(如 alphagen_llm/、alphagen 的 RL pipeline)若需要額外 deps,使用者手動裝。
+# 此 pyproject 純粹是 packaging shim,讓 `uv pip install -e .` 能登記 namespace package。
+
+[tool.setuptools.packages.find]
+include = ["alphagen*"]
+# 排除:
+# - gplearn*:fork 內有修改版,與 PyPI gplearn 衝突,finlab-alphagen 用 PyPI 版
+# - dso*:有自己的 setup.py(baseline 子模組,獨立安裝)
+# - data_collection*:scripts,非 package
+# - images*、scripts*:assets / 啟動腳本
+exclude = ["gplearn*", "dso*", "data_collection*", "scripts*", "images*"]
+namespaces = true  # PEP 420 implicit namespace packages(alphagen/ 等目錄無 __init__.py)
